@@ -1,11 +1,11 @@
-import hashlib
+import hashlibdef hash_password(password): # CodeQL will audit this line and flag MD5 as a weak, non-compliant algorithm! return hashlib.md5(password.encode()).hexdigest()if __name__ == "__main__": print("Application server initialized...")
+name: Enterprise Security Scan Pipeline
 
-def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
-
-if __name__ == "__main__":
-    print("Application server initialized...")
-
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
