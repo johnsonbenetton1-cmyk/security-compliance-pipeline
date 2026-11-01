@@ -1,5 +1,3 @@
-git checkout main
-cat > .github/workflows/security-pipeline.yml <<'YAML'
 name: Security Pipeline
 
 on:
@@ -28,7 +26,3 @@ jobs:
 
       - name: Perform Static Code Analysis
         uses: github/codeql-action/analyze@v3
-YAML
-git add .github/workflows/security-pipeline.yml
-git commit -m "Fix CodeQL workflow language and permissions"
-git push origin main
