@@ -1,0 +1,34 @@
+git checkout main
+cat > .github/workflows/security-pipeline.yml <<'YAML'
+name: Security Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  sast-code-scan:
+    name: CodeQL Static Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL Engine
+        uses: github/codeql-action/init@v3
+        with:
+          languages: actions
+          build-mode: none
+
+      - name: Perform Static Code Analysis
+        uses: github/codeql-action/analyze@v3
+YAML
+git add .github/workflows/security-pipeline.yml
+git commit -m "Fix CodeQL workflow language and permissions"
+git push origin main
