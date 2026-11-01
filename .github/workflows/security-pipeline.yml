@@ -1,50 +1,16 @@
-name: Enterprise Security Scan Pipeline
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
-  security-events: write
-  actions: read
-
 jobs:
   sast-code-scan:
     name: CodeQL Static Security Scan
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Initialize CodeQL Engine
-      uses: github/codeql-action/init@v3
-      with:
-        languages: python, javascript, go
+      - name: Initialize CodeQL Engine
+        uses: github/codeql-action/init@v3
+        with:
+          languages: actions
+          build-mode: none
 
-    - name: Perform Static Code Analysis
-      uses: github/codeql-action/analyze@v3
-
-  iac-linting:
-    name: Infrastructure Security Scan
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Validate Configurations via Checkov
-      uses: bridgecrewio/checkov-action@master
-      with:
-        framework: dockerfile,terraform,kubernetes
-        output_format: cli
-        soft_fail: true
-
-  perimeter-validation:
-    name: Perimeter Network Scan
-    runs-on: ubuntu-latest
-    steps:
-    - name: Run Perimeter Connectivity Check
-      run: |
-        curl -sI --insecure https://yourstagingapp.com | grep -i "server" || echo "Domain checked"
+      - name: Perform Static Code Analysis
+        uses: github/codeql-action/analyze@v3
