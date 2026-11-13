@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bitcoin payment information for Johnson Finance Services.">
+  <meta name="theme-color" content="#10243a">
+  <title>Bitcoin Payments | Johnson Finance Services</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7f9;color:#1d2935}
+    header,footer{background:#10243a;color:#fff;padding:20px}main{width:min(760px,calc(100% - 32px));margin:40px auto;background:#fff;padding:28px;border-radius:12px}
+    a{color:#245b82}.address{overflow-wrap:anywhere;background:#eef3f7;padding:16px;border-radius:8px;font-family:monospace;font-size:1rem}
+    .notice{border-left:4px solid #c9a96e;padding:12px 16px;background:#f8f5ed;margin:20px 0}
+    button{padding:12px 18px;background:#10243a;color:#fff;border:0;border-radius:6px;font-size:1rem}
+  </style>
+</head>
+<body>
+<header><strong>JOHNSON FINANCE SERVICES</strong> · <a href="index.html" style="color:#fff">Home</a></header>
+<main>
+  <h1>Bitcoin (BTC) payment method</h1>
+  <p>Johnson Finance Services can accept Bitcoin payments to the receiving address below, on the <strong>Bitcoin mainnet only</strong>.</p>
+  <h2>Receiving address</h2>
+  <p class="address" id="btc-address">bc1qqfqtwvjye7nklpxpkt2xsjv3luvs32yfsk8gpf</p>
+  <button type="button" id="copy-address">Copy Bitcoin address</button>
+  <p id="copy-status" aria-live="polite"></p>
+  <div class="notice"><strong>Important:</strong> Please contact us first and obtain a written service scope and payment amount before sending Bitcoin. Send only BTC on the Bitcoin network. Do not send testnet coins, Lightning payments, or any other cryptocurrency to this address. Blockchain transfers are generally irreversible; carefully verify the address and amount in your own wallet before confirming.</div>
+  <p><strong>Business email:</strong> <a href="mailto:johnsonfinance.service@gmail.com">johnsonfinance.service@gmail.com</a></p>
+  <p>Payment is not a booking or confirmation of service until Johnson Finance Services confirms receipt and the agreed scope in writing. Never email passwords, wallet recovery phrases, private keys, or banking credentials.</p>
+  <p><a href="index.html">Return to Johnson Finance Services</a></p>
+</main>
+<footer>© 2026 Johnson Finance Services</footer>
+<script>
+document.getElementById('copy-address').addEventListener('click', async () => {
+  const address = document.getElementById('btc-address').textContent.trim();
+  const status = document.getElementById('copy-status');
+  try { await navigator.clipboard.writeText(address); status.textContent = 'Address copied.'; }
+  catch { status.textContent = 'Please select and copy the address above.'; }
+});
+</script>
+</body>
+</html>
