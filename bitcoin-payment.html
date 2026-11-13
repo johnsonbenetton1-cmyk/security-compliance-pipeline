@@ -12,20 +12,44 @@
     a{color:#245b82}.address{overflow-wrap:anywhere;background:#eef3f7;padding:16px;border-radius:8px;font-family:monospace;font-size:1rem}
     .notice{border-left:4px solid #c9a96e;padding:12px 16px;background:#f8f5ed;margin:20px 0}
     button{padding:12px 18px;background:#10243a;color:#fff;border:0;border-radius:6px;font-size:1rem}
+    .steps{padding-left:22px}.record{background:#eef3f7;padding:16px;border-radius:8px;overflow-wrap:anywhere}
   </style>
 </head>
 <body>
 <header><strong>JOHNSON FINANCE SERVICES</strong> · <a href="index.html" style="color:#fff">Home</a></header>
 <main>
   <h1>Bitcoin (BTC) payment method</h1>
-  <p>Johnson Finance Services can accept Bitcoin payments to the receiving address below, on the <strong>Bitcoin mainnet only</strong>.</p>
+  <p>Johnson Finance Services can accept direct Bitcoin payments to the receiving address below, on the <strong>Bitcoin mainnet only</strong>.</p>
   <h2>Receiving address</h2>
   <p class="address" id="btc-address">bc1qqfqtwvjye7nklpxpkt2xsjv3luvs32yfsk8gpf</p>
   <button type="button" id="copy-address">Copy Bitcoin address</button>
   <p id="copy-status" aria-live="polite"></p>
-  <div class="notice"><strong>Important:</strong> Please contact us first and obtain a written service scope and payment amount before sending Bitcoin. Send only BTC on the Bitcoin network. Do not send testnet coins, Lightning payments, or any other cryptocurrency to this address. Blockchain transfers are generally irreversible; carefully verify the address and amount in your own wallet before confirming.</div>
+
+  <div class="notice"><strong>Before sending:</strong> Contact us and receive written confirmation of the service scope, total price in USD, BTC amount, and payment instructions. Do not estimate the BTC amount yourself. Bitcoin transfers are generally irreversible; verify the address, network, and amount carefully in your own wallet before confirming.</div>
+
+  <h2>Customer payment steps</h2>
+  <ol class="steps">
+    <li>Email <a href="mailto:johnsonfinance.service@gmail.com">johnsonfinance.service@gmail.com</a> to request a written service quote and scope.</li>
+    <li>Wait for our written reply confirming the service, USD price, BTC amount, and payment address. A quote is not a booking.</li>
+    <li>Send only BTC on the Bitcoin mainnet to the address shown above. Do not send testnet coins, Lightning payments, or any other cryptocurrency.</li>
+    <li>After sending, email the agreed service name, amount sent, date, and transaction ID (TXID). Never send wallet login details or recovery information.</li>
+    <li>We will check the payment in our wallet and reply in writing when the correct amount is received and shown as confirmed. Work is not scheduled as paid until we send that confirmation.</li>
+  </ol>
+
+  <h2>Payment confirmation and receipt</h2>
+  <p>Payments are checked manually. This page does not create invoices, monitor the blockchain, send automatic alerts, or issue automatic receipts. A customer email or transaction ID by itself is not proof that funds have arrived.</p>
+  <p>After verifying receipt, Johnson Finance Services will send a written payment confirmation by email recording the service, amount received, date, and transaction ID. Keep that email for your records.</p>
+  <div class="record"><strong>Customer payment details to include in your email:</strong><br>
+    Service agreed:<br>
+    USD quote / agreed BTC amount:<br>
+    Amount sent:<br>
+    Date sent:<br>
+    Transaction ID (TXID):<br>
+    Name or business:
+  </div>
+
   <p><strong>Business email:</strong> <a href="mailto:johnsonfinance.service@gmail.com">johnsonfinance.service@gmail.com</a></p>
-  <p>Payment is not a booking or confirmation of service until Johnson Finance Services confirms receipt and the agreed scope in writing. Never email passwords, wallet recovery phrases, private keys, or banking credentials.</p>
+  <p>Never email passwords, wallet recovery phrases, private keys, verification codes, or banking credentials. If the network or address does not match the instructions exactly, stop and contact us before sending.</p>
   <p><a href="index.html">Return to Johnson Finance Services</a></p>
 </main>
 <footer>© 2026 Johnson Finance Services</footer>
