@@ -39,3 +39,12 @@ See [LAUNCH-READINESS.md](LAUNCH-READINESS.md) for the revenue workflow, deploym
 - Use Supabase Row Level Security if customer records are added.
 - Only provide services within the business's verified qualifications and legal authority.
 - The global research directory links to public sources; it does not bypass privacy, access controls, subscriptions, or copyright restrictions.
+
+
+## Customer portal and Supabase
+
+The customer portal is available at `customer-portal.html`. It uses Supabase Auth for email/password sign-up, sign-in, and password reset. The Supabase project is `qpqjwgsyelvzzbmqaaca` (US West). The browser uses only the public publishable key; never place a Supabase secret or service-role key in this repository.
+
+The database migration creates `customer_profiles` and `service_requests`, enables row-level security, and restricts customer records to the authenticated owner. The static portal hides the account interface when signed out; actual data authorization is enforced by database RLS. This is not server-rendered route protection, because GitHub Pages serves static files.
+
+Before taking real customer data: configure the Supabase Auth site URL and redirect allow-list for the published GitHub Pages origin; test email confirmation, password reset, and account isolation using two separate test accounts; review privacy/retention and support processes. Payment checkout and payment confirmation are not configured, and the portal does not accept payments.
