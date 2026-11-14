@@ -1,15 +1,38 @@
-name: Enterprise Security Scan Pipeline
+name: Site integrity check
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main", "launch-foundation-2026-11-14"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+permissions:
+  contents: read
 
 jobs:
-  perimeter-validation:
+  required-pages:
+    name: Verify required public pages
     runs-on: ubuntu-latest
     steps:
-        - name: Run Perimeter Connectivity Check
-      run: |
-        curl -sI --insecure https://yourstagingapp.com | grep -i "server" || echo "Domain checked"
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify required pages and launch documentation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          required = [
+              "index.html",
+              "services.html",
+              "client-intake.html",
+              "privacy.html",
+              "terms.html",
+              "global-research.html",
+              "LAUNCH-READINESS.md",
+          ]
+          missing = [name for name in required if not Path(name).is_file() or Path(name).stat().st_size == 0]
+          if missing:
+              raise SystemExit("Missing or empty required files: " + ", ".join(missing))
+          print("Required public pages and launch documentation are present.")
+          PY
