@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Secure customer sign-in and service request portal for Johnson Finance Services.">
+<meta name="theme-color" content="#10243a">
+<title>Customer Portal | Johnson Finance Services</title>
+<style>
+:root{--navy:#10243a;--blue:#245b82;--gold:#c9a96e;--ink:#1d2935;--muted:#5d6b78;--paper:#f5f7f9;--line:#e2e8ee}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header,footer{background:var(--navy);color:#fff;padding:18px 0}.wrap{width:min(900px,calc(100% - 32px));margin:auto}header a,footer a{color:#f1d9a7}.brand{color:#fff;text-decoration:none;font-weight:800}.nav{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+main{padding:38px 0 60px}h1,h2{color:var(--navy)}.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;margin:18px 0;box-shadow:0 5px 20px rgba(16,36,58,.04)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.muted{color:var(--muted)}label{display:block;font-weight:650;margin:12px 0 5px}input,textarea,select{width:100%;padding:12px;border:1px solid #cbd5df;border-radius:6px;font:inherit}textarea{min-height:120px}button{border:0;border-radius:6px;padding:12px 18px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer;margin:10px 8px 0 0}button.secondary{background:#e8eef3;color:var(--navy)}button:disabled{opacity:.55;cursor:wait}.status{padding:12px;border-radius:6px;background:#edf3f7;margin:12px 0;white-space:pre-wrap}.hidden{display:none!important}.request{border-top:1px solid var(--line);padding:14px 0}.pill{font-size:.85rem;background:#edf3f7;padding:3px 8px;border-radius:20px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.card{padding:17px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html">JOHNSON FINANCE SERVICES</a><nav><a href="index.html">Home</a> · <a href="services.html">Services</a> · <a href="privacy.html">Privacy</a></nav></div></header>
+<main class="wrap">
+<h1>Customer portal</h1>
+<p class="muted">Sign in to view your own profile and submit or review your service requests. Your account data is protected by Supabase authentication and database row-level security.</p>
+<div id="message" class="status" role="status" aria-live="polite">Connecting securely…</div>
+<section id="auth-panel" class="card hidden">
+<h2>Sign in or create an account</h2>
+<div class="grid">
+<form id="signin-form">
+<h3>Returning customer</h3>
+<label for="signin-email">Email</label><input id="signin-email" type="email" autocomplete="email" required>
+<label for="signin-password">Password</label><input id="signin-password" type="password" autocomplete="current-password" minlength="8" required>
+<button type="submit">Sign in</button>
+<button type="button" class="secondary" id="reset-password">Send password reset</button>
+</form>
+<form id="signup-form">
+<h3>New customer</h3>
+<label for="signup-name">Your name</label><input id="signup-name" autocomplete="name" maxlength="120" required>
+<label for="signup-email">Email</label><input id="signup-email" type="email" autocomplete="email" required>
+<label for="signup-password">Create password</label><input id="signup-password" type="password" autocomplete="new-password" minlength="8" required>
+<button type="submit">Create account</button>
+<p class="muted">Use at least 8 characters. If email confirmation is enabled, check your inbox before signing in.</p>
+</form>
+</div>
+</section>
+<section id="portal-panel" class="hidden">
+<div class="card">
+<div class="nav"><h2>Your account</h2><button type="button" class="secondary" id="signout">Sign out</button></div>
+<form id="profile-form">
+<label for="profile-name">Display name</label><input id="profile-name" maxlength="120">
+<label for="profile-phone">Phone (optional)</label><input id="profile-phone" type="tel" maxlength="40">
+<button type="submit">Save profile</button>
+</form>
+</div>
+<div class="card">
+<h2>Submit a service request</h2>
+<form id="request-form">
+<label for="service-type">Service</label>
+<select id="service-type" required>
+<option value="">Choose a service</option>
+<option>Startup organization session</option><option>Business document organization</option><option>Administrative workflow setup</option><option>Business readiness review</option><option>Other administrative support</option>
+</select>
+<label for="request-details">What help do you need?</label>
+<textarea id="request-details" maxlength="5000" required placeholder="Describe the administrative help you are requesting. Do not include Social Security numbers, passwords, bank login details, or full payment-card numbers."></textarea>
+<button type="submit">Submit request</button>
+</form>
+</div>
+<div class="card"><h2>Your service requests</h2><div id="requests-list" class="muted">Loading…</div></div>
+</section>
+<div class="card"><strong>Privacy reminder:</strong> Do not submit Social Security numbers, passwords, bank credentials, identity documents, or full card numbers through this portal. A submitted request is not an accepted service agreement; scope and price must be confirmed separately in writing.</div>
+</main>
+<footer><div class="wrap">© 2026 Johnson Finance Services · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></div></footer>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const SUPABASE_URL = "https://qpqjwgsyelvzzbmqaaca.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1hbjSDDiBgRJG513ma24-A_J-AuNT2X";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = (id) => document.getElementById(id);
+const message = (text) => { $("message").textContent = text; };
+const show = (signedIn) => { $("auth-panel").classList.toggle("hidden", signedIn); $("portal-panel").classList.toggle("hidden", !signedIn); };
+async function loadPortal(user) {
+  show(true);
+  const { data: profile, error: profileError } = await supabase.from("customer_profiles").select("display_name,phone").eq("id", user.id).maybeSingle();
+  if (profileError) message("Signed in, but the profile could not be loaded. Please refresh or contact support.");
+  else { $("profile-name").value = profile?.display_name || user.user_metadata?.full_name || ""; $("profile-phone").value = profile?.phone || ""; message("Signed in as " + user.email + ". Your customer area is private to your account."); }
+  const { data: requests, error } = await supabase.from("service_requests").select("id,service_type,details,status,created_at").order("created_at",{ascending:false}).limit(50);
+  if (error) { $("requests-list").textContent = "Unable to load requests right now."; return; }
+  $("requests-list").replaceChildren();
+  if (!requests?.length) { $("requests-list").textContent = "No service requests yet."; return; }
+  for (const item of requests) {
+    const row = document.createElement("article"); row.className = "request";
+    const heading = document.createElement("strong"); heading.textContent = item.service_type + " ";
+    const status = document.createElement("span"); status.className = "pill"; status.textContent = item.status.replaceAll("_"," ");
+    const detail = document.createElement("p"); detail.textContent = item.details;
+    const date = document.createElement("small"); date.textContent = new Date(item.created_at).toLocaleString();
+    row.append(heading,status,detail,date); $("requests-list").append(row);
+  }
+}
+$("signin-form").addEventListener("submit", async (event) => {
+  event.preventDefault(); message("Signing in…");
+  const { error } = await supabase.auth.signInWithPassword({email:$("signin-email").value.trim(),password:$("signin-password").value});
+  if (error) message(error.message);
+});
+$("signup-form").addEventListener("submit", async (event) => {
+  event.preventDefault(); message("Creating your account…");
+  const { data, error } = await supabase.auth.signUp({email:$("signup-email").value.trim(),password:$("signup-password").value,options:{data:{full_name:$("signup-name").value.trim()}}});
+  if (error) { message(error.message); return; }
+  if (data.session) await loadPortal(data.user);
+  else message("Account created. Check your email for the confirmation link, then return here and sign in.");
+});
+$("reset-password").addEventListener("click", async () => {
+  const email = $("signin-email").value.trim();
+  if (!email) { message("Enter your email address first."); return; }
+  const { error } = await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.href});
+  message(error ? error.message : "If an account exists for that email, a password-reset message has been sent.");
+});
+$("profile-form").addEventListener("submit", async (event) => {
+  event.preventDefault(); const { data:{user} } = await supabase.auth.getUser(); if (!user) return;
+  const { error } = await supabase.from("customer_profiles").upsert({id:user.id,display_name:$("profile-name").value.trim(),phone:$("profile-phone").value.trim() || null});
+  message(error ? error.message : "Profile saved.");
+});
+$("request-form").addEventListener("submit", async (event) => {
+  event.preventDefault(); const { data:{user} } = await supabase.auth.getUser(); if (!user) return;
+  const { error } = await supabase.from("service_requests").insert({customer_id:user.id,service_type:$("service-type").value,details:$("request-details").value.trim()});
+  if (error) { message(error.message); return; }
+  $("request-form").reset(); message("Your request was submitted."); await loadPortal(user);
+});
+$("signout").addEventListener("click", async () => { const {error}=await supabase.auth.signOut(); if(error) message(error.message); });
+supabase.auth.onAuthStateChange((_event,session) => {
+  if (session?.user) loadPortal(session.user);
+  else { show(false); message("You are signed out. Sign in or create an account to continue."); }
+});
+const {data:{session},error:initError}=await supabase.auth.getSession();
+if(initError) message("Could not initialize sign-in. Refresh and try again.");
+else if(session?.user) await loadPortal(session.user);
+else { show(false); message("You are signed out. Sign in or create an account to continue."); }
+</script>
+</body></html>

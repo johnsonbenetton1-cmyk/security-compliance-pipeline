@@ -62,3 +62,13 @@ The research directory links to public global sources. A later research product 
 **Customer authentication / protected portal:** not implemented.
 
 **Global research:** a curated public-source directory is included; universal or private access is not available.
+
+
+## Supabase customer portal update — 14 November 2026
+
+- Supabase project created: `johnson-finance-customer-platform` in US West; quoted project cost at creation was $0/month.
+- Email/password Auth client flow added in `customer-portal.html` (sign-up, sign-in, password reset, sign-out).
+- Database tables added: `customer_profiles` and `service_requests`; RLS enabled with owner-only profile/request access. Security advisor returned no security lints after migration.
+- This is a static GitHub Pages front end. It uses a client-side signed-in interface plus database-enforced RLS; it is not server-side route protection.
+- Still required before public customer onboarding: set Supabase Auth Site URL and redirect allow-list to the final GitHub Pages URL; test confirmation and reset email delivery; test two-account data isolation; publish and verify the new site build.
+- No payment processor, checkout, paid subscription, or automatic payment reconciliation is configured. Do not advertise payment acceptance or guaranteed earnings.
